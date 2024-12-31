@@ -6,8 +6,6 @@ import ButtonFormComponent from '@/modules/common/components/ButtonFormComponent
 import InputFormComponent from '@/modules/common/components/InputFormComponent.vue'
 import LoadingView from '@/modules/common/animation/LoadingView.vue'
 
-const userNameInputRef = ref<HTMLInputElement | null>(null)
-const passwordInputRef = ref<HTMLInputElement | null>(null)
 const authStore = useAuthStore()
 const loading = ref(false)
 const toast = useToast()
@@ -30,17 +28,6 @@ const onLogin = async () => {
 
   toast.error('Credenciales inválidas')
 }
-
-const assignValue = (value: string, id: string) => {
-  switch (id) {
-    case 'username':
-      myLogin.userName = value
-      break
-    case 'password':
-      myLogin.password = value
-      break
-  }
-}
 </script>
 
 <template>
@@ -58,7 +45,7 @@ const assignValue = (value: string, id: string) => {
               label="User Name"
               placeholder="UserName"
               type="text"
-              @input-value="assignValue($event, 'username')"
+              @input-value="(value) => (myLogin.userName = value)"
             />
           </div>
 
@@ -68,7 +55,7 @@ const assignValue = (value: string, id: string) => {
               label="Password"
               placeholder="**********"
               type="password"
-              @input-value="assignValue($event, 'password')"
+              @input-value="(value) => (myLogin.password = value)"
             />
           </div>
         </div>
