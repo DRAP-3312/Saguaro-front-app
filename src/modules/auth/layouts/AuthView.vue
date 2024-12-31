@@ -4,7 +4,7 @@ import { ref } from 'vue'
 import { RouterView } from 'vue-router'
 
 const btnActive = ref<number | null>(1)
-const isDark = ref(false)
+const isDark = ref(true)
 const onClic = (selected: number) => {
   btnActive.value = selected
 }
@@ -22,7 +22,7 @@ const changeTheme = (state: boolean) => {
       <div
         class="w-4/5 h-auto flex flex-col md:flex-row dark:bg-gray-800 bg-gray-200 rounded-lg shadow-lg"
       >
-        <div class="flex items-center justify-center md:w-1/3 p-2">
+        <div class="flex items-center justify-center md:w-1/3 p-2 w-2/5">
           <div class="text-center">
             <img src="../../../assets/newlogo.png" alt="img logo" class="w-3/4 animate-sway" />
           </div>
@@ -30,11 +30,7 @@ const changeTheme = (state: boolean) => {
 
         <div class="flex flex-col flex-grow p-2">
           <div class="flex">
-            <RouterLink
-              :to="{ name: 'login', query: { dark: isDark.toString() } }"
-              class="w-1/2"
-              @click="onClic(1)"
-            >
+            <RouterLink :to="{ name: 'login' }" class="w-1/2" @click="onClic(1)">
               <button
                 class="w-full py-2 rounded-tl-lg dark:hover:bg-slate-700 hover:bg-slate-300"
                 :class="
@@ -61,7 +57,7 @@ const changeTheme = (state: boolean) => {
           </div>
 
           <div
-            class="flex-grow flex justify-center items-center dark:bg-gray-900 bg-white rounded-bl-lg rounded-br-lg p-5"
+            class="flex-grow flex justify-center dark:bg-gray-900 bg-white rounded-bl-lg rounded-br-lg p-1"
           >
             <RouterView />
           </div>

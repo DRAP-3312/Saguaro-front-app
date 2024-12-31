@@ -5,7 +5,7 @@ const emit = defineEmits<{
   isDark: [boolean]
 }>()
 
-const isDark = ref(false)
+const isDark = ref(true)
 
 const changeTheme = () => {
   isDark.value = !isDark.value
