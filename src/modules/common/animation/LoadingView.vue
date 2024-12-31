@@ -1,95 +1,71 @@
 <template>
-  <div class="v-spinner" v-show="loading">
-    <div class="v-scale v-scale1" :style="spinnerStyle1"></div>
-    <div class="v-scale v-scale2" :style="spinnerStyle2"></div>
-    <div class="v-scale v-scale3" :style="spinnerStyle3"></div>
-    <div class="v-scale v-scale4" :style="spinnerStyle4"></div>
-    <div class="v-scale v-scale5" :style="spinnerStyle5"></div>
+  <div class="absolute inset-0 flex items-center justify-center backdrop-blur-sm">
+    <svg width="40" height="40" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
+      <rect class="spinner_jCIR" x="1" y="6" width="2.8" height="12" fill="#118B50" />
+      <rect
+        class="spinner_jCIR spinner_upm8"
+        x="5.8"
+        y="6"
+        width="2.8"
+        height="12"
+        fill="#247e19"
+      />
+      <rect
+        class="spinner_jCIR spinner_2eL5"
+        x="10.6"
+        y="6"
+        width="2.8"
+        height="12"
+        fill="#98df84"
+      />
+      <rect
+        class="spinner_jCIR spinner_Rp9l"
+        x="15.4"
+        y="6"
+        width="2.8"
+        height="12"
+        fill="#72bf60"
+      />
+      <rect
+        class="spinner_jCIR spinner_dy3W"
+        x="20.2"
+        y="6"
+        width="2.8"
+        height="12"
+        fill="#247e19"
+      />
+    </svg>
   </div>
 </template>
 
-<script lang="ts" setup>
-import { ref, computed } from 'vue'
-
-const props = defineProps({
-  loading: {
-    type: Boolean,
-    default: true,
-  },
-  color: {
-    type: String,
-    default: '#5dc596',
-  },
-  height: {
-    type: String,
-    default: '35px',
-  },
-  width: {
-    type: String,
-    default: '4px',
-  },
-  margin: {
-    type: String,
-    default: '2px',
-  },
-  radius: {
-    type: String,
-    default: '2px',
-  },
-})
-
-const spinnerStyle = computed(() => ({
-  backgroundColor: props.color,
-  height: props.height,
-  width: props.width,
-  margin: props.margin,
-  borderRadius: props.radius,
-  display: 'inline-block',
-  animationName: 'v-scaleStretchDelay',
-  animationDuration: '1s',
-  animationIterationCount: 'infinite',
-  animationTimingFunction: 'cubic-bezier(.2,.68,.18,1.08)',
-  animationFillMode: 'both',
-}))
-
-const spinnerStyle1 = computed(() => ({
-  ...spinnerStyle.value,
-  animationDelay: '0.1s',
-}))
-
-const spinnerStyle2 = computed(() => ({
-  ...spinnerStyle.value,
-  animationDelay: '0.2s',
-}))
-
-const spinnerStyle3 = computed(() => ({
-  ...spinnerStyle.value,
-  animationDelay: '0.3s',
-}))
-
-const spinnerStyle4 = computed(() => ({
-  ...spinnerStyle.value,
-  animationDelay: '0.4s',
-}))
-
-const spinnerStyle5 = computed(() => ({
-  ...spinnerStyle.value,
-  animationDelay: '0.5s',
-}))
-</script>
-
 <style>
-.v-spinner {
-  text-align: center;
+.spinner_jCIR {
+  animation: spinner_B8Vq 0.9s linear infinite;
+  animation-delay: -0.9s;
 }
-
-@keyframes v-scaleStretchDelay {
+.spinner_upm8 {
+  animation-delay: -0.8s;
+}
+.spinner_2eL5 {
+  animation-delay: -0.7s;
+}
+.spinner_Rp9l {
+  animation-delay: -0.6s;
+}
+.spinner_dy3W {
+  animation-delay: -0.5s;
+}
+@keyframes spinner_B8Vq {
   0%,
-  100% {
-    transform: scaleY(1);
+  66.66% {
+    animation-timing-function: cubic-bezier(0.36, 0.61, 0.3, 0.98);
+    y: 6px;
+    height: 12px;
   }
-  50% {
-    transform: scaleY(0.4);
+  33.33% {
+    animation-timing-function: cubic-bezier(0.36, 0.61, 0.3, 0.98);
+    y: 1px;
+    height: 22px;
   }
 }
 </style>

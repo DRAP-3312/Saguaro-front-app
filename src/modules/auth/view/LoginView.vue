@@ -1,89 +1,67 @@
 <script lang="ts" setup>
-// @ts-ignore
-import LoadingView from '@/modules/common/animation/LoadingView.vue'
-import { reactive, ref } from 'vue'
+import { computed, reactive, ref } from 'vue'
+import { useAuthStore } from '../store/auth.store'
+import { useToast } from 'vue-toastification'
+import { useRoute } from 'vue-router'
 
-const loading = ref(false)
-const params = reactive<{ userName: string; password: string }>({
+const route = useRoute()
+const isDark = computed(() => route.query.dark === 'true')
+const userNameInputRef = ref<HTMLInputElement | null>(null)
+const passwordInputRef = ref<HTMLInputElement | null>(null)
+const authStore = useAuthStore()
+const toast = useToast()
+const myLogin = reactive<{ userName: string; password: string }>({
   userName: '',
   password: '',
 })
+
+const onLogin = async () => {
+  if (myLogin.userName === '' || myLogin.password.length < 6) {
+    return toast.warning('User name o password no pueden estar vacios')
+  }
+
+  const ok = await authStore.login(myLogin)
+  if (ok) return
+
+  toast.error('Credenciales inválidas')
+}
 </script>
 
 <template>
-  <form
-    class="flex items-center justify-center h-screen text-start"
-    @submit.prevent="
-      () => {
-        loading = !loading
-      }
-    "
-  >
-    <div class="p-4 flex flex-col sm:flex-row justify-around items-center w-full max-w-4xl">
-      <LoadingView
-        v-if="loading"
-        class="absolute inset-0 flex items-center justify-center backdrop-blur-sm"
-      />
-      <div class="w-1/2 max-w-sm">
-        <img src="../../../assets/newlogo.png" alt="img logo" class="w-full animate-sway" />
-      </div>
-
-      <div class="p-3 mt-4 sm:mt-0 sm:ml-4 w-full max-w-md">
+  <div class="w-3/5" :class="{ dark: isDark }">
+    <form class="" @submit.prevent="onLogin">
+      <div class="mt-4 sm:mt-0 sm:ml-4 dark:text-white text-gray-700 text-start">
         <div>
-          <label class="block text-white text-sm font-semibold mb-2" for="username"
-            >User Name</label
-          >
+          <label class="p-1" for="username">User Name</label>
           <input
-            class="shadow appearance-none border rounded w-full py-2 px-3 text-gray-300 bg-gray-800 leading-tight focus:outline-none focus:shadow-outline"
+            class="border rounded-md w-full py-2 px-3 dark:text-gray-300 text-gray-500 dark:bg-gray-800 leading-tight focus:outline-none"
             id="username"
+            ref="userNameInputRef"
             type="text"
-            v-model="params.userName"
+            v-model="myLogin.userName"
             placeholder="Username"
           />
         </div>
         <div class="mt-4">
-          <label class="block text-white text-sm font-bold mb-2" for="password">Password</label>
+          <label class="p-1" for="password">Password</label>
           <input
-            class="shadow appearance-none border rounded w-full py-2 px-3 text-gray-300 bg-gray-800 mb-3 leading-tight focus:outline-none focus:shadow-outline"
+            class="border rounded-md w-full py-2 px-3 dark:text-gray-300 text-gray-500 dark:bg-gray-800 leading-tight focus:outline-none"
             id="password"
+            ref="passwordInputRef"
             type="password"
-            v-model="params.password"
+            v-model="myLogin.password"
             placeholder="******************"
           />
         </div>
-        <div class="flex items-center justify-between mt-4">
+        <div class="mt-3">
           <button
-            class="bg-[#118B50] hover:bg-green-700 text-white font-bold py-2 px-4 rounded focus:outline-none focus:shadow-outline"
+            class="bg-[#118B50] hover:bg-green-700 text-white font-bold py-2 px-4 rounded focus:outline-none focus:shadow-outline w-full"
             type="submit"
           >
             Sign In
           </button>
         </div>
       </div>
-    </div>
-  </form>
+    </form>
+  </div>
 </template>
-
-<style scoped>
-@keyframes sway {
-  0%,
-  100% {
-    transform: translateX(0);
-  }
-  50% {
-    transform: translateX(20px);
-  }
-}
-.animate-sway {
-  animation: sway 3s ease-in-out infinite;
-}
-@keyframes wave {
-  0%,
-  100% {
-    transform: translateY(-5px);
-  }
-  50% {
-    transform: translateY(5px);
-  }
-}
-</style>
