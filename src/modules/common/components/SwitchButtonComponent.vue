@@ -14,12 +14,14 @@ const changeTheme = () => {
 </script>
 
 <template>
-  <div class="absolute right-2 top-2" :class="{ dark: isDark }">
-    <button
-      @click="changeTheme"
-      class="px-4 py-2 text-white rounded bg-blue-500 hover:bg-blue-600 dark:bg-gray-700 dark:hover:bg-gray-600"
-    >
-      {{ isDark ? 'Dark' : 'Light' }}
-    </button>
+  <div :class="{ dark: isDark }">
+    <div class="">
+      <button
+        @click="changeTheme"
+        class="w-full px-4 py-2 text-white rounded bg-blue-500 hover:bg-blue-600 dark:bg-gray-700 dark:hover:bg-gray-600"
+      >
+        {{ isDark ? 'Dark' : 'Light' }}
+      </button>
+    </div>
   </div>
 </template>

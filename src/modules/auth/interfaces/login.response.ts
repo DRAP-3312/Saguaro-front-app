@@ -1,3 +1,5 @@
+import type { Rol } from '@/interfaces'
+
 export interface AuthResponse {
   id: string
   userName: string

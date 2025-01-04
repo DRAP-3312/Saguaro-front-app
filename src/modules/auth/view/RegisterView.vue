@@ -4,11 +4,10 @@ import ButtonFormComponent from '@/modules/common/components/ButtonFormComponent
 import InputFormComponent from '@/modules/common/components/InputFormComponent.vue'
 import SelectFormComponent from '@/modules/common/components/SelectFormComponent.vue'
 import { reactive, ref } from 'vue'
-import { useToast } from 'vue-toastification'
 import { registerAction } from '../actions/register.actions'
 import LoadingView from '@/modules/common/animation/LoadingView.vue'
+import { toastCustom } from '@/modules/common/alert/alertMessage'
 
-const toast = useToast()
 const loadingReq = ref(false)
 const myRegister = reactive<RegisterAuth>({
   userName: '',
@@ -26,9 +25,9 @@ const onRegister = async () => {
   const register = await registerAction(myRegister)
   loadingReq.value = false
   if (register.ok) {
-    toast.success(register.message)
+    toastCustom.success(register.message)
   } else {
-    toast.error(register.message)
+    toastCustom.error(register.message)
   }
 }
 </script>

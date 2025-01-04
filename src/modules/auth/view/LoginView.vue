@@ -1,14 +1,16 @@
 <script lang="ts" setup>
 import { computed, reactive, ref } from 'vue'
 import { useAuthStore } from '../store/auth.store'
-import { useToast } from 'vue-toastification'
 import ButtonFormComponent from '@/modules/common/components/ButtonFormComponent.vue'
 import InputFormComponent from '@/modules/common/components/InputFormComponent.vue'
 import LoadingView from '@/modules/common/animation/LoadingView.vue'
+import { toastCustom } from '@/modules/common/alert/alertMessage'
+import { useRouter } from 'vue-router'
 
 const authStore = useAuthStore()
+const router = useRouter()
 const loading = ref(false)
-const toast = useToast()
+
 const myLogin = reactive<{ userName: string; password: string }>({
   userName: '',
   password: '',
@@ -16,17 +18,18 @@ const myLogin = reactive<{ userName: string; password: string }>({
 
 const onLogin = async () => {
   if (myLogin.userName === '' || myLogin.password.length < 6) {
-    return toast.warning('User name o password no pueden estar vacios')
+    return toastCustom.warning('User name o password no pueden estar vacios')
   }
 
   loading.value = true
   const ok = await authStore.login(myLogin)
   loading.value = false
   if (ok) {
-    return toast.success(`Bienvenido ${authStore.user?.name} ${authStore.user?.lastname}`)
+    toastCustom.welcome(`Bienvenido ${authStore.user?.name} ${authStore.user?.lastname}`)
+    router.push({ name: 'home' })
+  } else {
+    toastCustom.error('Credenciales inválidas')
   }
-
-  toast.error('Credenciales inválidas')
 }
 </script>
 

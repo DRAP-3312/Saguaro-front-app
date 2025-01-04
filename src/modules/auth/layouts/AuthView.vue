@@ -1,5 +1,4 @@
 <script setup lang="ts">
-import SwitchButtonComponent from '@/modules/common/components/SwitchButtonComponent.vue'
 import { ref } from 'vue'
 import { RouterView } from 'vue-router'
 
@@ -62,9 +61,6 @@ const changeTheme = (state: boolean) => {
             <RouterView />
           </div>
         </div>
-      </div>
-      <div class="">
-        <SwitchButtonComponent @is-dark="changeTheme" />
       </div>
     </div>
   </div>

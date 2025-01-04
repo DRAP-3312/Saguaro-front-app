@@ -4,48 +4,73 @@ import { loginAction } from '../actions/login.action'
 import { useLocalStorage } from '@vueuse/core'
 import { AuthStatus, type UserRes } from '../interfaces'
 import type { LoginAuth } from '@/interfaces'
+import { checkStatusAction } from '../actions/check-status.action'
 
 export const useAuthStore = defineStore('auth', () => {
-  const authStatus = ref<AuthStatus>(AuthStatus.Checking)
-  const user = ref<UserRes | undefined>()
-  const token = ref(useLocalStorage('token', ''))
+  const authStatus = useLocalStorage<AuthStatus>('authStatus', AuthStatus.Checking)
+  const user = useLocalStorage<UserRes | undefined>('user', undefined)
+  const token = useLocalStorage('token', '')
 
-  const login = async (params: LoginAuth) => {
+  const login = async (param: LoginAuth) => {
     try {
-      const loginRes = await loginAction(params)
-
-      if (!loginRes.ok) {
+      const loginResp = await loginAction(param)
+      if (!loginResp.ok) {
         logout()
         return false
       }
 
-      user.value = loginRes.user
-      token.value = loginRes.token
+      user.value = loginResp.user
+      token.value = loginResp.token
       authStatus.value = AuthStatus.Valid
 
       return true
     } catch (error) {
-      console.log(error)
-      logout()
+      return logout()
     }
   }
 
   const logout = () => {
+    localStorage.removeItem('token')
+
     authStatus.value = AuthStatus.Invalid
     user.value = undefined
     token.value = ''
     return false
   }
 
+  const checkAuthStatus = async (): Promise<boolean> => {
+    try {
+      const statusResp = await checkStatusAction()
+
+      if (!statusResp.ok) {
+        logout()
+        return false
+      }
+      console.log({ statusResp })
+      authStatus.value = AuthStatus.Valid
+      user.value = statusResp.user
+      token.value = statusResp.token
+      return true
+    } catch (error) {
+      //logout()
+      return false
+    }
+  }
+
   return {
     user,
-    authStatus,
     token,
-    login,
+    authStatus,
 
-    //getters
-    isCheking: computed(() => authStatus.value === AuthStatus.Checking),
-    isValid: computed(() => authStatus.value === AuthStatus.Valid),
-    isInvalid: computed(() => authStatus.value === AuthStatus.Invalid),
+    // Getters
+    isChecking: computed(() => authStatus.value === AuthStatus.Checking),
+    isAuthenticated: computed(() => authStatus.value === AuthStatus.Valid),
+    //isAdmin: computed(() => user.value?.roles.includes('admin') ?? false),
+    username: computed(() => user.value?.name),
+
+    // Actions
+    login,
+    logout,
+    checkAuthStatus,
   }
 })
